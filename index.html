@@ -3,121 +3,243 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>💻 Dicas Hacker — CMD/PowerShell | TechPC Assistência Lc</title>
-  <meta name="description" content="Comandos CMD/PowerShell, manutenção preventiva e diagnóstico avançado de computadores — estilo hacker." />
+  <title>💻 Dicas — CMD/PowerShell | TechPC Assistência Lc</title>
+  <meta name="description" content="Comandos CMD/PowerShell, manutenção preventiva e diagnóstico avançado — visual hacker com Matrix rain, scan neon e paleta cyber." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg:#050505;
-      --card:#0a0f1c;
-      --text:#d1fae5;
-      --muted:#6ee7b7;
-      --accent:#00ff6a;
-      --accent2:#00e0ff;
-      --border:rgba(0,255,106,.3);
+    :root{
+      --bg:#050505;           /* fundo principal */
+      --panel:#070b14;        /* painéis/cartões */
+      --panel-2:#0a0f1c;      /* variação */
+      --text:#d1fae5;         /* texto principal (verde-claro) */
+      --muted:#8fe6c1;        /* texto secundário */
+      --accent:#00ff6a;       /* verde neon */
+      --accent2:#00e0ff;      /* ciano neon */
+      --danger:#ff4d6d;       /* rosa p/ alertas */
+      --border:rgba(0,255,106,.35);
+      --shadow:0 18px 40px rgba(0,0,0,.55);
     }
     *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
     body{
-      font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;
-      background:radial-gradient(circle at top left,#0f172a,#050505 70%);
+      font-family:'Inter',system-ui,Segoe UI,Roboto,Arial,sans-serif;
+      background:radial-gradient(1200px 600px at 10% -10%, rgba(0,255,106,.12), transparent 60%),
+                 radial-gradient(1200px 600px at 90% 110%, rgba(0,224,255,.10), transparent 60%),
+                 linear-gradient(180deg,#0b1223,#050505 65%);
       color:var(--text);
-      line-height:1.6;
-      overflow-x:hidden;
+      line-height:1.65; overflow-x:hidden; min-height:100dvh;
     }
 
-    header{padding:32px 16px;text-align:center;border-bottom:1px solid var(--border);position:relative;z-index:2}
+    /* ====== HEADER ====== */
+    header{padding:28px 16px 22px;text-align:center;border-bottom:1px solid var(--border);position:relative;z-index:2}
     header h1{
-      font-family:"IBM Plex Mono",monospace;
-      font-size:clamp(26px,3vw,40px);
-      color:var(--accent);
-      text-shadow:0 0 10px rgba(0,255,106,.6);
+      font-family:'IBM Plex Mono',monospace; font-weight:800;
+      font-size:clamp(26px,3.3vw,42px);
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+      text-shadow:0 0 16px rgba(0,255,106,.35);
     }
-    header h1::after{
-      content:"█";
-      margin-left:6px;
-      color:var(--accent);
-      animation:blink 1s steps(1) infinite;
-    }
+    header h1 .cursor{display:inline-block;width:.55ch;background:var(--accent);margin-left:6px;animation:blink 1s steps(1) infinite}
     @keyframes blink{50%{opacity:0}}
-    header p{margin-top:6px;color:var(--muted);}
+    header p{margin-top:6px;color:var(--muted)}
 
-    .wrap{max-width:1100px;margin:0 auto;padding:28px 16px 60px;position:relative;z-index:2}
+    /* ====== LAYOUT ====== */
+    .wrap{max-width:1100px;margin:0 auto;padding:26px 16px 80px;position:relative;z-index:2}
+    .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
 
-    .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+    /* ====== CARD com borda neon dinâmica ====== */
     .card{
-      background:var(--card);
+      position:relative; overflow:hidden; border-radius:16px;
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      padding:18px; box-shadow:var(--shadow);
       border:1px solid var(--border);
-      border-radius:14px;
-      padding:18px;
-      box-shadow:0 12px 28px rgba(0,0,0,.5);
-      position:relative;
-      overflow:hidden;
+      isolation:isolate;
     }
-    .card::after{
-      content:\"\";position:absolute;inset:0;pointer-events:none;
-      background:linear-gradient(120deg,transparent,rgba(0,255,106,.08),transparent);
-      transform:translateX(-100%);
-      animation:scan 3.5s linear infinite;
+    .card::before{ /* borda animada */
+      content:""; position:absolute; inset:-2px; z-index:-1; border-radius:18px;
+      background:conic-gradient(from 90deg, var(--accent), var(--accent2), var(--accent));
+      filter:blur(6px); opacity:.35; animation:spin 6s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(1turn)}}
+    .card h3{margin:0 0 8px; font:700 18px 'IBM Plex Mono',monospace; color:var(--accent2)}
+    .card p{margin:0 0 10px; color:var(--muted)}
+
+    /* efeito scanner sutil dentro do card */
+    .card .scan{
+      position:absolute; inset:0; pointer-events:none;
+      background:linear-gradient(120deg,transparent,rgba(0,255,106,.10),transparent);
+      transform:translateX(-100%); animation:scan 3.8s linear infinite;
     }
     @keyframes scan{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-    .card h3{margin:0 0 8px;color:var(--accent2);font-family:\"IBM Plex Mono\",monospace}
-    .card p{margin:0 0 10px;color:var(--muted)}
 
-    pre{
-      background:#000; border:1px solid var(--border);
-      padding:12px; border-radius:10px; margin:0 0 12px;
-      overflow:auto; font-family:monospace; font-size:13px; color:#00ff6a;
-      box-shadow:inset 0 0 8px rgba(0,255,106,.2);
-    }
-    code{font-family:inherit}
+    pre{background:#000;border:1px solid var(--border);padding:12px;border-radius:12px;margin:0 0 12px;overflow:auto;
+        font:600 13px 'IBM Plex Mono',monospace;color:var(--accent); box-shadow:inset 0 0 10px rgba(0,255,106,.18)}
+    code{font-family:'IBM Plex Mono',monospace}
 
-    .btn{
-      display:inline-block;padding:8px 12px;
-      border-radius:8px;border:1px solid var(--border);
-      background:#0b1020;color:var(--text);cursor:pointer;
-      font-family:\"IBM Plex Mono\",monospace;
-      transition:.2s;
-    }
-    .btn:hover{transform:translateY(-2px);background:rgba(0,255,106,.1)}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);
+         background:#0b1020;color:var(--text);cursor:pointer;font:700 13px 'IBM Plex Mono',monospace;transition:.18s}
+    .btn:hover{transform:translateY(-2px);background:rgba(0,255,106,.12)}
 
-    .badge{
-      font-size:12px;padding:3px 8px;
-      border:1px solid var(--accent2);
-      border-radius:999px;background:#000;color:var(--accent2);
-      font-family:\"IBM Plex Mono\",monospace;
-    }
-    .note{font-size:13px;color:#93c5fd}
+    .badge{display:inline-block;font:700 11px 'IBM Plex Mono',monospace;letter-spacing:.3px;padding:3px 8px;border:1px solid var(--accent2);
+           border-radius:999px;background:#000;color:var(--accent2);margin-bottom:8px}
+    .note{font-size:13px;color:#9cc9ff}
 
     details{border:1px dashed var(--accent2);border-radius:12px;padding:12px;background:#000}
-    details summary{cursor:pointer;font-weight:600;margin-bottom:8px;color:var(--accent)}
+    details summary{cursor:pointer;font-weight:700;margin-bottom:8px;color:var(--accent);font-family:'IBM Plex Mono',monospace}
 
-    footer{text-align:center;padding:28px 12px;color:var(--muted);border-top:1px solid var(--border)}
+    footer{text-align:center;padding:26px 12px;color:var(--muted);border-top:1px solid var(--border)}
 
-    /* Fundo matrix rain */
-    #matrix{
-      position:fixed;inset:0;z-index:0;pointer-events:none;
-      background:#000;
+    /* ====== FAB / Ações ====== */
+    .fab{
+      position:fixed; right:18px; bottom:18px; z-index:5;
+      display:flex; gap:10px; flex-direction:column;
+    }
+    .fab button{
+      width:46px; height:46px; border-radius:12px; border:1px solid var(--border);
+      background:#0b1020; color:var(--text); cursor:pointer; box-shadow:var(--shadow);
+      font:700 14px 'IBM Plex Mono',monospace;
+    }
+
+    /* ====== COMMAND PALETTE (Ctrl/⌘+K) ====== */
+    .kbar{position:fixed; inset:0; display:none; place-items:center; z-index:20; background:rgba(0,0,0,.6); backdrop-filter:blur(4px)}
+    .kbar.open{display:grid}
+    .kbox{width:min(800px,92vw); background:linear-gradient(180deg,var(--panel-2),#070b14); border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow); overflow:hidden}
+    .khead{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border); font:700 14px 'IBM Plex Mono',monospace; color:var(--accent2)}
+    .kcontent{max-height:min(60vh,500px); overflow:auto}
+    .kitem{padding:12px 14px; border-bottom:1px solid rgba(255,255,255,.06); display:flex; justify-content:space-between; gap:14px}
+    .kitem code{color:var(--accent)}
+    .kitem button{padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:#0b1020;color:var(--text);font:700 12px 'IBM Plex Mono',monospace;cursor:pointer}
+
+    /* ====== MATRIX rain canvas / performance ====== */
+    #matrix{position:fixed; inset:0; z-index:0; pointer-events:none; background:#000}
+
+    /* A11y: reduzir efeitos se preferir menos movimento */
+    @media (prefers-reduced-motion: reduce){
+      .card::before,.card .scan{animation:none}
     }
   </style>
 </head>
 <body>
-  <canvas id="matrix"></canvas>
+  <canvas id="matrix" aria-hidden="true"></canvas>
 
   <header>
-    <h1>Dicas Hacker — CMD/PowerShell</h1>
+    <h1>💻 Dicas Hacker — CMD/PowerShell <span class="cursor" aria-hidden="true"></span></h1>
     <p>Diagnóstico e manutenção avançada • <span style="color:var(--accent2)">TechPC Assistência Lc</span></p>
   </header>
 
   <main class="wrap">
-    <!-- Conteúdo igual ao que você já tinha, reaproveitado -->
-    <!-- ... cards e seções ... -->
+    <section class="grid" aria-label="Blocos principais">
+      <article class="card">
+        <span class="badge">Compatibilidade</span>
+        <h3>CPU ↔ Placa-mãe — checagem rápida</h3>
+        <p>Confirme soquete e chipset no site do fabricante. Use estes comandos para coletar os modelos:</p>
+        <div class="scan" aria-hidden="true"></div>
+        <pre><code>wmic baseboard get manufacturer,product,version,serialnumber
+wmic cpu get name</code></pre>
+        <p class="note">Procure por “CPU Support List” do modelo de placa-mãe.</p>
+        <button class="btn" data-copy="wmic baseboard get manufacturer,product,version,serialnumber&#10;wmic cpu get name">Copiar</button>
+      </article>
+
+      <article class="card">
+        <span class="badge">Integridade do Windows</span>
+        <h3>DISM + SFC</h3>
+        <p>Repare a imagem do sistema e verifique arquivos corrompidos:</p>
+        <div class="scan" aria-hidden="true"></div>
+        <pre><code>DISM /Online /Cleanup-Image /RestoreHealth
+sfc /scannow</code></pre>
+        <button class="btn" data-copy="DISM /Online /Cleanup-Image /RestoreHealth&#10;sfc /scannow">Copiar</button>
+      </article>
+
+      <article class="card">
+        <span class="badge">Rede</span>
+        <h3>Renovar IP + reset DNS/Winsock</h3>
+        <p>Útil quando sites não abrem ou a rede oscila:</p>
+        <div class="scan" aria-hidden="true"></div>
+        <pre><code>ipconfig /flushdns
+ipconfig /release
+ipconfig /renew
+netsh winsock reset</code></pre>
+        <button class="btn" data-copy="ipconfig /flushdns&#10;ipconfig /release&#10;ipconfig /renew&#10;netsh winsock reset">Copiar</button>
+      </article>
+
+      <article class="card">
+        <span class="badge">Disco</span>
+        <h3>CHKDSK com correção</h3>
+        <p>Agenda verificação e reparo na próxima inicialização:</p>
+        <div class="scan" aria-hidden="true"></div>
+        <pre><code>chkdsk C: /f /r</code></pre>
+        <button class="btn" data-copy="chkdsk C: /f /r">Copiar</button>
+      </article>
+
+      <article class="card">
+        <span class="badge">Energia</span>
+        <h3>Plano de alto desempenho</h3>
+        <p>Para PCs ligados na tomada:</p>
+        <div class="scan" aria-hidden="true"></div>
+        <pre><code>powercfg -setactive SCHEME_MIN</code></pre>
+        <button class="btn" data-copy="powercfg -setactive SCHEME_MIN">Copiar</button>
+      </article>
+
+      <article class="card">
+        <span class="badge">Processos</span>
+        <h3>Listar e encerrar</h3>
+        <p>Descubra e finalize processos problemáticos:</p>
+        <div class="scan" aria-hidden="true"></div>
+        <pre><code>tasklist
+taskkill /F /IM nome_do_programa.exe</code></pre>
+        <button class="btn" data-copy="tasklist&#10;taskkill /F /IM nome_do_programa.exe">Copiar</button>
+      </article>
+    </section>
+
+    <section class="card" style="margin-top:18px">
+      <div class="scan" aria-hidden="true"></div>
+      <h3>Dicas importantes</h3>
+      <details>
+        <summary>Antes de trocar CPU/placa</summary>
+        <ul>
+          <li>Verifique <strong>soquete</strong> (LGA1200, AM4, AM5) e <strong>chipset</strong>.</li>
+          <li>Atualize a <strong>BIOS/UEFI</strong> se necessário para suportar novas CPUs.</li>
+          <li>Cheque <strong>TDP</strong> e <strong>VRM</strong> da placa-mãe.</li>
+          <li>Confirme tipo/frequência da <strong>RAM</strong>.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>Manutenção preventiva</summary>
+        <ul>
+          <li>Troque a <strong>pasta térmica</strong> a cada 1–2 anos.</li>
+          <li>Mantenha Windows e drivers atualizados.</li>
+          <li>Use SSD para o sistema (boot e apps muito mais rápidos).</li>
+        </ul>
+      </details>
+    </section>
   </main>
 
   <footer>
-    © 2025 TechPC Assistência Lc — Suporte e manutenção em estilo hacker
+    © <span id="year"></span> TechPC Assistência Lc — Suporte e manutenção em estilo hacker
   </footer>
 
+  <!-- Floating Actions -->
+  <div class="fab" aria-label="Ações rápidas">
+    <button id="toggle-matrix" title="Ativar/Desativar Matrix">M</button>
+    <button id="open-kbar" title="Comandos rápidos (Ctrl/⌘+K)">K</button>
+  </div>
+
+  <!-- Command Palette -->
+  <div class="kbar" id="kbar" role="dialog" aria-modal="true" aria-label="Comandos rápidos">
+    <div class="kbox">
+      <div class="khead">⌘/Ctrl + K — Paleta de Comandos</div>
+      <div class="kcontent" id="kcontent">
+        <!-- Itens gerados via JS -->
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Copiar comandos
+    // Ano dinâmico
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Botões de copiar
     document.querySelectorAll('.btn[data-copy]').forEach(btn=>{
       btn.addEventListener('click',()=>{
         const text=btn.getAttribute('data-copy');
@@ -128,31 +250,90 @@
       });
     });
 
-    // Matrix rain background
-    const canvas=document.getElementById('matrix');
-    const ctx=canvas.getContext('2d');
-    let w,h,cols,ypos;
+    // ====== MATRIX RAIN com DPR e requestAnimationFrame ======
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+    const glyphs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*+-<>=/';
+    const baseSize = 16; let fontSize=baseSize, cols=0, drops=[], running=true;
+
+    const mediaReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
     function resize(){
-      w=canvas.width=window.innerWidth;
-      h=canvas.height=window.innerHeight;
-      cols=Math.floor(w/20)+1;
-      ypos=Array(cols).fill(0);
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      canvas.width = Math.floor(window.innerWidth * dpr);
+      canvas.height = Math.floor(window.innerHeight * dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      fontSize = baseSize; cols = Math.ceil(window.innerWidth / fontSize);
+      drops = Array.from({length:cols}, ()=> Math.random()*window.innerHeight);
+      ctx.font = fontSize + 'px monospace';
     }
+
     function draw(){
-      ctx.fillStyle='rgba(0,0,0,.1)';
-      ctx.fillRect(0,0,w,h);
-      ctx.fillStyle='#0f0';
-      ctx.font='15pt monospace';
-      ypos.forEach((y,ind)=>{
-        const text=String.fromCharCode(Math.random()*128);
-        const x=ind*20;
-        ctx.fillText(text,x,y);
-        if(y>100+Math.random()*10000) ypos[ind]=0;
-        else ypos[ind]=y+20;
+      if(!running) return; // pausa respeitada
+      ctx.fillStyle = 'rgba(0,0,0,0.08)';
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+
+      const t = performance.now()*0.0003; // leve variação de cor
+      const g = Math.floor(128 + 127*Math.sin(t*6));
+      ctx.fillStyle = `rgb(0, ${g}, 0)`;
+
+      for(let i=0;i<drops.length;i++){
+        const ch = glyphs.charAt((Math.random()*glyphs.length)|0);
+        ctx.fillText(ch, i*fontSize, drops[i]);
+        drops[i] += (Math.random()*20 + 6);
+        if(drops[i] > window.innerHeight) drops[i] = 0;
+      }
+      requestAnimationFrame(draw);
+    }
+
+    resize();
+    if(!mediaReduced.matches){ requestAnimationFrame(draw); }
+
+    window.addEventListener('resize', resize, {passive:true});
+    mediaReduced.addEventListener ? mediaReduced.addEventListener('change', ()=>{
+      running = !mediaReduced.matches;
+      if(running) requestAnimationFrame(draw);
+    }) : mediaReduced.addListener(()=>{ running = !mediaReduced.matches; if(running) requestAnimationFrame(draw); });
+
+    // Toggle matrix pelo FAB
+    document.getElementById('toggle-matrix').addEventListener('click', ()=>{
+      running = !running;
+      if(running) requestAnimationFrame(draw);
+    });
+
+    // ====== COMMAND PALETTE (Ctrl/⌘+K) ======
+    const kbar = document.getElementById('kbar');
+    const kcontent = document.getElementById('kcontent');
+    const openK = document.getElementById('open-kbar');
+
+    const quickCmds = [
+      {title:'DISM + SFC', cmd:'DISM /Online /Cleanup-Image /RestoreHealth\nsfc /scannow'},
+      {title:'Rede — renovar/flush', cmd:'ipconfig /flushdns\nipconfig /release\nipconfig /renew\nnetsh winsock reset'},
+      {title:'CHKDSK', cmd:'chkdsk C: /f /r'},
+      {title:'System Info', cmd:'systeminfo'},
+      {title:'Drivers', cmd:'driverquery'}
+    ];
+
+    function renderKbar(){
+      kcontent.innerHTML = quickCmds.map(({title,cmd})=>`<div class="kitem"><div><strong>${title}</strong><div><code>${cmd.replaceAll('\n','<br>')}</code></div></div><div><button data-cmd="${encodeURIComponent(cmd)}">Copiar</button></div></div>`).join('');
+      kcontent.querySelectorAll('button[data-cmd]').forEach(b=>{
+        b.addEventListener('click',()=>{
+          const c = decodeURIComponent(b.getAttribute('data-cmd'));
+          navigator.clipboard.writeText(c);
+          b.textContent='✔'; setTimeout(()=>b.textContent='Copiar',900);
+        });
       });
     }
-    resize();setInterval(draw,50);
-    window.addEventListener('resize',resize);
+
+    function openPalette(){ kbar.classList.add('open'); renderKbar(); }
+    function closePalette(){ kbar.classList.remove('open'); }
+
+    openK.addEventListener('click', openPalette);
+    kbar.addEventListener('click', (e)=>{ if(e.target===kbar) closePalette(); });
+    window.addEventListener('keydown', (e)=>{
+      if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); openPalette(); }
+      if(e.key==='Escape') closePalette();
+    });
   </script>
 </body>
 </html>
