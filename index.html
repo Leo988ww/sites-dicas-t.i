@@ -4,120 +4,81 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>💻 Dicas — CMD/PowerShell | TechPC Assistência Lc</title>
-  <meta name="description" content="Comandos CMD/PowerShell, manutenção preventiva e diagnóstico avançado — visual hacker com Matrix rain, scan neon e paleta cyber." />
+  <meta name="description" content="Comandos CMD/PowerShell, manutenção preventiva e diagnóstico — visual hacker com Matrix e paleta neon. Inclui checklist: PC liga e não dá vídeo." />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#050505;           /* fundo principal */
-      --panel:#070b14;        /* painéis/cartões */
-      --panel-2:#0a0f1c;      /* variação */
-      --text:#d1fae5;         /* texto principal (verde-claro) */
-      --muted:#8fe6c1;        /* texto secundário */
-      --accent:#00ff6a;       /* verde neon */
-      --accent2:#00e0ff;      /* ciano neon */
-      --danger:#ff4d6d;       /* rosa p/ alertas */
-      --border:rgba(0,255,106,.35);
+      --bg:#050505; --panel:#070b14; --panel2:#0a0f1c;
+      --text:#d1fae5; --muted:#8fe6c1;
+      --acc:#00ff6a; --acc2:#00e0ff; --border:rgba(0,255,106,.35);
       --shadow:0 18px 40px rgba(0,0,0,.55);
     }
     *{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
     body{
       font-family:'Inter',system-ui,Segoe UI,Roboto,Arial,sans-serif;
-      background:radial-gradient(1200px 600px at 10% -10%, rgba(0,255,106,.12), transparent 60%),
-                 radial-gradient(1200px 600px at 90% 110%, rgba(0,224,255,.10), transparent 60%),
-                 linear-gradient(180deg,#0b1223,#050505 65%);
-      color:var(--text);
-      line-height:1.65; overflow-x:hidden; min-height:100dvh;
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(0,255,106,.12), transparent 60%),
+        radial-gradient(1200px 600px at 90% 110%, rgba(0,224,255,.10), transparent 60%),
+        linear-gradient(180deg,#0b1223,#050505 65%);
+      color:var(--text); line-height:1.65; overflow-x:hidden; min-height:100dvh;
     }
 
-    /* ====== HEADER ====== */
-    header{padding:28px 16px 22px;text-align:center;border-bottom:1px solid var(--border);position:relative;z-index:2}
+    /* HEADER */
+    header{padding:28px 16px 18px;text-align:center;border-bottom:1px solid var(--border);position:relative;z-index:2}
     header h1{
-      font-family:'IBM Plex Mono',monospace; font-weight:800;
-      font-size:clamp(26px,3.3vw,42px);
-      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      font:800 clamp(26px,3.3vw,42px)/1 'IBM Plex Mono',monospace;
+      background:linear-gradient(90deg,var(--acc),var(--acc2));
       -webkit-background-clip:text; background-clip:text; color:transparent;
       text-shadow:0 0 16px rgba(0,255,106,.35);
     }
-    header h1 .cursor{display:inline-block;width:.55ch;background:var(--accent);margin-left:6px;animation:blink 1s steps(1) infinite}
+    header h1 .cursor{display:inline-block;width:.55ch;background:var(--acc);margin-left:6px;animation:blink 1s steps(1) infinite}
     @keyframes blink{50%{opacity:0}}
     header p{margin-top:6px;color:var(--muted)}
+    .links{margin-top:10px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+    .chip{border:1px solid var(--border);border-radius:999px;padding:6px 12px;background:#000;color:var(--text);font:700 12px 'IBM Plex Mono',monospace}
+    .chip a{color:var(--acc2);text-decoration:none}
 
-    /* ====== LAYOUT ====== */
+    /* LAYOUT */
     .wrap{max-width:1100px;margin:0 auto;padding:26px 16px 80px;position:relative;z-index:2}
     .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
 
-    /* ====== CARD com borda neon dinâmica ====== */
-    .card{
-      position:relative; overflow:hidden; border-radius:16px;
-      background:linear-gradient(180deg,var(--panel),var(--panel-2));
-      padding:18px; box-shadow:var(--shadow);
-      border:1px solid var(--border);
-      isolation:isolate;
-    }
-    .card::before{ /* borda animada */
-      content:""; position:absolute; inset:-2px; z-index:-1; border-radius:18px;
-      background:conic-gradient(from 90deg, var(--accent), var(--accent2), var(--accent));
-      filter:blur(6px); opacity:.35; animation:spin 6s linear infinite;
-    }
-    @keyframes spin{to{transform:rotate(1turn)}}
-    .card h3{margin:0 0 8px; font:700 18px 'IBM Plex Mono',monospace; color:var(--accent2)}
-    .card p{margin:0 0 10px; color:var(--muted)}
+    /* CARD */
+    .card{position:relative;overflow:hidden;border-radius:16px;background:linear-gradient(180deg,var(--panel),var(--panel2));padding:18px;box-shadow:var(--shadow);border:1px solid var(--border)}
+    .card h3{margin:0 0 8px;font:700 18px 'IBM Plex Mono',monospace;color:var(--acc2)}
+    .card p{margin:0 0 10px;color:var(--muted)}
+    .badge{display:inline-block;font:700 11px 'IBM Plex Mono',monospace;letter-spacing:.3px;padding:3px 8px;border:1px solid var(--acc2);border-radius:999px;background:#000;color:var(--acc2);margin-bottom:8px}
 
-    /* efeito scanner sutil dentro do card */
-    .card .scan{
-      position:absolute; inset:0; pointer-events:none;
-      background:linear-gradient(120deg,transparent,rgba(0,255,106,.10),transparent);
-      transform:translateX(-100%); animation:scan 3.8s linear infinite;
-    }
-    @keyframes scan{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-
-    pre{background:#000;border:1px solid var(--border);padding:12px;border-radius:12px;margin:0 0 12px;overflow:auto;
-        font:600 13px 'IBM Plex Mono',monospace;color:var(--accent); box-shadow:inset 0 0 10px rgba(0,255,106,.18)}
+    pre{background:#000;border:1px solid var(--border);padding:12px;border-radius:12px;margin:0 0 12px;overflow:auto;font:600 13px 'IBM Plex Mono',monospace;color:var(--acc);box-shadow:inset 0 0 10px rgba(0,255,106,.18)}
     code{font-family:'IBM Plex Mono',monospace}
 
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);
-         background:#0b1020;color:var(--text);cursor:pointer;font:700 13px 'IBM Plex Mono',monospace;transition:.18s}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:#0b1020;color:var(--text);cursor:pointer;font:700 13px 'IBM Plex Mono',monospace;transition:.18s}
     .btn:hover{transform:translateY(-2px);background:rgba(0,255,106,.12)}
 
-    .badge{display:inline-block;font:700 11px 'IBM Plex Mono',monospace;letter-spacing:.3px;padding:3px 8px;border:1px solid var(--accent2);
-           border-radius:999px;background:#000;color:var(--accent2);margin-bottom:8px}
-    .note{font-size:13px;color:#9cc9ff}
-
-    details{border:1px dashed var(--accent2);border-radius:12px;padding:12px;background:#000}
-    details summary{cursor:pointer;font-weight:700;margin-bottom:8px;color:var(--accent);font-family:'IBM Plex Mono',monospace}
+    details{border:1px dashed var(--acc2);border-radius:12px;padding:12px;background:#000}
+    details summary{cursor:pointer;font-weight:700;margin-bottom:8px;color:var(--acc);font-family:'IBM Plex Mono',monospace}
 
     footer{text-align:center;padding:26px 12px;color:var(--muted);border-top:1px solid var(--border)}
 
-    /* ====== FAB / Ações ====== */
-    .fab{
-      position:fixed; right:18px; bottom:18px; z-index:5;
-      display:flex; gap:10px; flex-direction:column;
-    }
-    .fab button{
-      width:46px; height:46px; border-radius:12px; border:1px solid var(--border);
-      background:#0b1020; color:var(--text); cursor:pointer; box-shadow:var(--shadow);
-      font:700 14px 'IBM Plex Mono',monospace;
-    }
+    /* FAB / Ações */
+    .fab{position:fixed;right:18px;bottom:18px;z-index:5;display:flex;gap:10px;flex-direction:column}
+    .fab button{width:46px;height:46px;border-radius:12px;border:1px solid var(--border);background:#0b1020;color:var(--text);cursor:pointer;box-shadow:var(--shadow);font:700 14px 'IBM Plex Mono',monospace}
 
-    /* ====== COMMAND PALETTE (Ctrl/⌘+K) ====== */
-    .kbar{position:fixed; inset:0; display:none; place-items:center; z-index:20; background:rgba(0,0,0,.6); backdrop-filter:blur(4px)}
+    /* Kbar */
+    .kbar{position:fixed;inset:0;display:none;place-items:center;z-index:20;background:rgba(0,0,0,.6);backdrop-filter:blur(4px)}
     .kbar.open{display:grid}
-    .kbox{width:min(800px,92vw); background:linear-gradient(180deg,var(--panel-2),#070b14); border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow); overflow:hidden}
-    .khead{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border); font:700 14px 'IBM Plex Mono',monospace; color:var(--accent2)}
-    .kcontent{max-height:min(60vh,500px); overflow:auto}
-    .kitem{padding:12px 14px; border-bottom:1px solid rgba(255,255,255,.06); display:flex; justify-content:space-between; gap:14px}
-    .kitem code{color:var(--accent)}
+    .kbox{width:min(800px,92vw);background:linear-gradient(180deg,var(--panel2),#070b14);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+    .khead{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);font:700 14px 'IBM Plex Mono',monospace;color:var(--acc2)}
+    .kcontent{max-height:min(60vh,500px);overflow:auto}
+    .kitem{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;gap:14px}
+    .kitem code{color:var(--acc)}
     .kitem button{padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:#0b1020;color:var(--text);font:700 12px 'IBM Plex Mono',monospace;cursor:pointer}
 
-    /* ====== MATRIX rain canvas / performance ====== */
-    #matrix{position:fixed; inset:0; z-index:0; pointer-events:none; background:#000}
+    /* Matrix */
+    #matrix{position:fixed;inset:0;z-index:0;pointer-events:none;background:#000}
 
-    /* A11y: reduzir efeitos se preferir menos movimento */
-    @media (prefers-reduced-motion: reduce){
-      .card::before,.card .scan{animation:none}
-    }
+    @media (prefers-reduced-motion: reduce){.card::before{animation:none}}
   </style>
 </head>
 <body>
@@ -125,27 +86,29 @@
 
   <header>
     <h1>💻 Dicas Hacker — CMD/PowerShell <span class="cursor" aria-hidden="true"></span></h1>
-    <p>Diagnóstico e manutenção avançada • <span style="color:var(--accent2)">TechPC Assistência Lc</span></p>
+    <p>Diagnóstico e manutenção avançada • <span style="color:var(--acc2)">TechPC Assistência Lc</span></p>
+    <div class="links">
+      <span class="chip">Instagram: <a href="https://instagram.com/techpcassistencialc01" target="_blank" rel="noopener">@techpcassistencialc01</a></span>
+    </div>
   </header>
 
   <main class="wrap">
+    <!-- GRID PRINCIPAL: sem repetições -->
     <section class="grid" aria-label="Blocos principais">
       <article class="card">
         <span class="badge">Compatibilidade</span>
-        <h3>CPU ↔ Placa-mãe — checagem rápida</h3>
-        <p>Confirme soquete e chipset no site do fabricante. Use estes comandos para coletar os modelos:</p>
-        <div class="scan" aria-hidden="true"></div>
+        <h3>CPU ↔ Placa-mãe (check rápido)</h3>
+        <p>Confirme soquete e chipset no site do fabricante. Colete os modelos com:</p>
         <pre><code>wmic baseboard get manufacturer,product,version,serialnumber
 wmic cpu get name</code></pre>
-        <p class="note">Procure por “CPU Support List” do modelo de placa-mãe.</p>
+        <p class="note">Procure por "CPU Support List" do modelo da placa.</p>
         <button class="btn" data-copy="wmic baseboard get manufacturer,product,version,serialnumber&#10;wmic cpu get name">Copiar</button>
       </article>
 
       <article class="card">
-        <span class="badge">Integridade do Windows</span>
-        <h3>DISM + SFC</h3>
+        <span class="badge">Windows</span>
+        <h3>DISM + SFC (integridade)</h3>
         <p>Repare a imagem do sistema e verifique arquivos corrompidos:</p>
-        <div class="scan" aria-hidden="true"></div>
         <pre><code>DISM /Online /Cleanup-Image /RestoreHealth
 sfc /scannow</code></pre>
         <button class="btn" data-copy="DISM /Online /Cleanup-Image /RestoreHealth&#10;sfc /scannow">Copiar</button>
@@ -153,9 +116,8 @@ sfc /scannow</code></pre>
 
       <article class="card">
         <span class="badge">Rede</span>
-        <h3>Renovar IP + reset DNS/Winsock</h3>
-        <p>Útil quando sites não abrem ou a rede oscila:</p>
-        <div class="scan" aria-hidden="true"></div>
+        <h3>Renovar IP / DNS / Winsock</h3>
+        <p>Quando sites não abrem ou a rede oscila:</p>
         <pre><code>ipconfig /flushdns
 ipconfig /release
 ipconfig /renew
@@ -167,16 +129,14 @@ netsh winsock reset</code></pre>
         <span class="badge">Disco</span>
         <h3>CHKDSK com correção</h3>
         <p>Agenda verificação e reparo na próxima inicialização:</p>
-        <div class="scan" aria-hidden="true"></div>
         <pre><code>chkdsk C: /f /r</code></pre>
         <button class="btn" data-copy="chkdsk C: /f /r">Copiar</button>
       </article>
 
       <article class="card">
         <span class="badge">Energia</span>
-        <h3>Plano de alto desempenho</h3>
+        <h3>Alto desempenho</h3>
         <p>Para PCs ligados na tomada:</p>
-        <div class="scan" aria-hidden="true"></div>
         <pre><code>powercfg -setactive SCHEME_MIN</code></pre>
         <button class="btn" data-copy="powercfg -setactive SCHEME_MIN">Copiar</button>
       </article>
@@ -185,31 +145,81 @@ netsh winsock reset</code></pre>
         <span class="badge">Processos</span>
         <h3>Listar e encerrar</h3>
         <p>Descubra e finalize processos problemáticos:</p>
-        <div class="scan" aria-hidden="true"></div>
         <pre><code>tasklist
 taskkill /F /IM nome_do_programa.exe</code></pre>
         <button class="btn" data-copy="tasklist&#10;taskkill /F /IM nome_do_programa.exe">Copiar</button>
       </article>
     </section>
 
+    <!-- NOVA SEÇÃO: PC liga e não dá vídeo -->
+    <section class="card" style="margin-top:18px" aria-labelledby="no-video">
+      <h3 id="no-video">PC ligou e <em>não dá vídeo</em> — checklist rápido</h3>
+      <details open>
+        <summary>1) Memória RAM</summary>
+        <ul>
+          <li>Desligue a fonte e <strong>retire da tomada</strong>.</li>
+          <li>Remova os pentes, limpe os contatos (borracha branca) e assente novamente.</li>
+          <li>Teste <strong>um pente por vez</strong> e alterne os slots (em placas atuais priorize A2/B2).</li>
+          <li>Se bipar, confira o <strong>código de beep</strong> no manual.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>2) Cabos/monitor</summary>
+        <ul>
+          <li>Confirme a entrada correta no monitor (HDMI/DP) e se o cabo está totalmente encaixado.</li>
+          <li>Teste outro cabo/porta e, se possível, outro monitor/TV.</li>
+          <li>Verifique se o monitor não está em <strong>entrada diferente</strong>.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>3) GPU dedicada x vídeo onboard</summary>
+        <ul>
+          <li>Se houver <strong>placa de vídeo dedicada</strong>, conecte o HDMI/DP nela — <em>não</em> na saída da placa-mãe.</li>
+          <li>Se o <strong>processador não tem vídeo integrado</strong> (ex.: Intel com sufixo "F", Ryzen sem "G"), as saídas de vídeo da <strong>placa-mãe não funcionam</strong>.</li>
+          <li>Reassente a GPU e confira os <strong>cabos PCIe (6/8 pinos)</strong> da fonte.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>4) Alimentação</summary>
+        <ul>
+          <li>Confira o conector <strong>EPS 8 pinos (CPU)</strong> perto do processador e o <strong>ATX 24 pinos</strong>.</li>
+          <li>Evite adaptadores ruins e extensões frouxas.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>5) CMOS/BIOS</summary>
+        <ul>
+          <li>Resete a BIOS removendo a bateria CR2032 por 1–2 minutos ou usando o pino <strong>CLR_CMOS</strong>.</li>
+          <li>Após ligar, aguarde o <strong>treinamento de memória</strong> (ligar/desligar é normal em alguns modelos).</li>
+        </ul>
+      </details>
+      <details>
+        <summary>6) CPU / Cooler</summary>
+        <ul>
+          <li>Verifique se o cooler está <strong>bem fixado</strong> e no conector <strong>CPU_FAN</strong>.</li>
+          <li>Cheque pinos (Intel) e pasta térmica na medida correta.</li>
+        </ul>
+      </details>
+      <p class="note" style="margin-top:8px">Dica: faça um teste de bancada (fora do gabinete) para descartar curto por espaçador errado.</p>
+    </section>
+
+    <!-- DICAS IMPORTANTES -->
     <section class="card" style="margin-top:18px">
-      <div class="scan" aria-hidden="true"></div>
       <h3>Dicas importantes</h3>
       <details>
-        <summary>Antes de trocar CPU/placa</summary>
+        <summary>Troca de CPU/placa</summary>
         <ul>
-          <li>Verifique <strong>soquete</strong> (LGA1200, AM4, AM5) e <strong>chipset</strong>.</li>
-          <li>Atualize a <strong>BIOS/UEFI</strong> se necessário para suportar novas CPUs.</li>
-          <li>Cheque <strong>TDP</strong> e <strong>VRM</strong> da placa-mãe.</li>
-          <li>Confirme tipo/frequência da <strong>RAM</strong>.</li>
+          <li>Soquete (LGA1200, AM4, AM5) e <strong>chipset</strong> compatível.</li>
+          <li>Atualize <strong>BIOS/UEFI</strong> se exigido pelo fabricante.</li>
+          <li>Cheque <strong>TDP/VRM</strong> e suporte de <strong>RAM</strong>.</li>
         </ul>
       </details>
       <details>
         <summary>Manutenção preventiva</summary>
         <ul>
-          <li>Troque a <strong>pasta térmica</strong> a cada 1–2 anos.</li>
-          <li>Mantenha Windows e drivers atualizados.</li>
-          <li>Use SSD para o sistema (boot e apps muito mais rápidos).</li>
+          <li>Troque <strong>pasta térmica</strong> a cada 1–2 anos.</li>
+          <li>Windows e drivers sempre atualizados.</li>
+          <li>Use <strong>SSD</strong> para o sistema.</li>
         </ul>
       </details>
     </section>
@@ -219,27 +229,25 @@ taskkill /F /IM nome_do_programa.exe</code></pre>
     © <span id="year"></span> TechPC Assistência Lc — Suporte e manutenção em estilo hacker
   </footer>
 
-  <!-- Floating Actions -->
+  <!-- Ações rápidas -->
   <div class="fab" aria-label="Ações rápidas">
     <button id="toggle-matrix" title="Ativar/Desativar Matrix">M</button>
     <button id="open-kbar" title="Comandos rápidos (Ctrl/⌘+K)">K</button>
   </div>
 
-  <!-- Command Palette -->
+  <!-- Palette -->
   <div class="kbar" id="kbar" role="dialog" aria-modal="true" aria-label="Comandos rápidos">
     <div class="kbox">
       <div class="khead">⌘/Ctrl + K — Paleta de Comandos</div>
-      <div class="kcontent" id="kcontent">
-        <!-- Itens gerados via JS -->
-      </div>
+      <div class="kcontent" id="kcontent"></div>
     </div>
   </div>
 
   <script>
-    // Ano dinâmico
+    // Ano
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Botões de copiar
+    // Copiar
     document.querySelectorAll('.btn[data-copy]').forEach(btn=>{
       btn.addEventListener('click',()=>{
         const text=btn.getAttribute('data-copy');
@@ -250,90 +258,62 @@ taskkill /F /IM nome_do_programa.exe</code></pre>
       });
     });
 
-    // ====== MATRIX RAIN com DPR e requestAnimationFrame ======
+    // Matrix
     const canvas = document.getElementById('matrix');
     const ctx = canvas.getContext('2d');
     const glyphs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*+-<>=/';
-    const baseSize = 16; let fontSize=baseSize, cols=0, drops=[], running=true;
-
+    const base = 16; let size=base, cols=0, drops=[], running=true;
     const mediaReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-
     function resize(){
-      const dpr = Math.max(1, window.devicePixelRatio || 1);
-      canvas.width = Math.floor(window.innerWidth * dpr);
-      canvas.height = Math.floor(window.innerHeight * dpr);
+      const dpr=Math.max(1,window.devicePixelRatio||1);
+      canvas.width=Math.floor(window.innerWidth*dpr);
+      canvas.height=Math.floor(window.innerHeight*dpr);
       ctx.setTransform(dpr,0,0,dpr,0,0);
-      fontSize = baseSize; cols = Math.ceil(window.innerWidth / fontSize);
-      drops = Array.from({length:cols}, ()=> Math.random()*window.innerHeight);
-      ctx.font = fontSize + 'px monospace';
+      size=base; cols=Math.ceil(window.innerWidth/size);
+      drops=Array.from({length:cols},()=>Math.random()*window.innerHeight);
+      ctx.font=size+'px monospace';
     }
-
     function draw(){
-      if(!running) return; // pausa respeitada
-      ctx.fillStyle = 'rgba(0,0,0,0.08)';
+      if(!running) return;
+      ctx.fillStyle='rgba(0,0,0,0.08)';
       ctx.fillRect(0,0,canvas.width,canvas.height);
-
-      const t = performance.now()*0.0003; // leve variação de cor
-      const g = Math.floor(128 + 127*Math.sin(t*6));
-      ctx.fillStyle = `rgb(0, ${g}, 0)`;
-
+      const t=performance.now()*0.0003; const g=Math.floor(128+127*Math.sin(t*6));
+      ctx.fillStyle=`rgb(0, ${g}, 0)`;
       for(let i=0;i<drops.length;i++){
-        const ch = glyphs.charAt((Math.random()*glyphs.length)|0);
-        ctx.fillText(ch, i*fontSize, drops[i]);
-        drops[i] += (Math.random()*20 + 6);
-        if(drops[i] > window.innerHeight) drops[i] = 0;
+        const ch=glyphs.charAt((Math.random()*glyphs.length)|0);
+        ctx.fillText(ch,i*size,drops[i]);
+        drops[i]+= (Math.random()*20+6);
+        if(drops[i]>window.innerHeight) drops[i]=0;
       }
       requestAnimationFrame(draw);
     }
+    resize(); if(!mediaReduced.matches){requestAnimationFrame(draw);} 
+    window.addEventListener('resize',resize,{passive:true});
+    (mediaReduced.addEventListener?mediaReduced.addEventListener('change',()=>{running=!mediaReduced.matches; if(running) requestAnimationFrame(draw);}):mediaReduced.addListener(()=>{running=!mediaReduced.matches; if(running) requestAnimationFrame(draw);}));
+    document.getElementById('toggle-matrix').addEventListener('click',()=>{running=!running; if(running) requestAnimationFrame(draw);});
 
-    resize();
-    if(!mediaReduced.matches){ requestAnimationFrame(draw); }
-
-    window.addEventListener('resize', resize, {passive:true});
-    mediaReduced.addEventListener ? mediaReduced.addEventListener('change', ()=>{
-      running = !mediaReduced.matches;
-      if(running) requestAnimationFrame(draw);
-    }) : mediaReduced.addListener(()=>{ running = !mediaReduced.matches; if(running) requestAnimationFrame(draw); });
-
-    // Toggle matrix pelo FAB
-    document.getElementById('toggle-matrix').addEventListener('click', ()=>{
-      running = !running;
-      if(running) requestAnimationFrame(draw);
-    });
-
-    // ====== COMMAND PALETTE (Ctrl/⌘+K) ======
-    const kbar = document.getElementById('kbar');
-    const kcontent = document.getElementById('kcontent');
-    const openK = document.getElementById('open-kbar');
-
-    const quickCmds = [
+    // Kbar
+    const kbar=document.getElementById('kbar');
+    const kcontent=document.getElementById('kcontent');
+    const openK=document.getElementById('open-kbar');
+    const quickCmds=[
       {title:'DISM + SFC', cmd:'DISM /Online /Cleanup-Image /RestoreHealth\nsfc /scannow'},
       {title:'Rede — renovar/flush', cmd:'ipconfig /flushdns\nipconfig /release\nipconfig /renew\nnetsh winsock reset'},
       {title:'CHKDSK', cmd:'chkdsk C: /f /r'},
       {title:'System Info', cmd:'systeminfo'},
       {title:'Drivers', cmd:'driverquery'}
     ];
-
     function renderKbar(){
-      kcontent.innerHTML = quickCmds.map(({title,cmd})=>`<div class="kitem"><div><strong>${title}</strong><div><code>${cmd.replaceAll('\n','<br>')}</code></div></div><div><button data-cmd="${encodeURIComponent(cmd)}">Copiar</button></div></div>`).join('');
+      kcontent.innerHTML=quickCmds.map(({title,cmd})=>`<div class=\"kitem\"><div><strong>${title}</strong><div><code>${cmd.replaceAll('\\n','<br>')}</code></div></div><div><button data-cmd=\"${encodeURIComponent(cmd)}\">Copiar</button></div></div>`).join('');
       kcontent.querySelectorAll('button[data-cmd]').forEach(b=>{
-        b.addEventListener('click',()=>{
-          const c = decodeURIComponent(b.getAttribute('data-cmd'));
-          navigator.clipboard.writeText(c);
-          b.textContent='✔'; setTimeout(()=>b.textContent='Copiar',900);
-        });
+        b.addEventListener('click',()=>{const c=decodeURIComponent(b.getAttribute('data-cmd'));navigator.clipboard.writeText(c);b.textContent='✔';setTimeout(()=>b.textContent='Copiar',900);});
       });
     }
-
-    function openPalette(){ kbar.classList.add('open'); renderKbar(); }
-    function closePalette(){ kbar.classList.remove('open'); }
-
-    openK.addEventListener('click', openPalette);
-    kbar.addEventListener('click', (e)=>{ if(e.target===kbar) closePalette(); });
-    window.addEventListener('keydown', (e)=>{
-      if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); openPalette(); }
-      if(e.key==='Escape') closePalette();
-    });
+    function openPalette(){kbar.classList.add('open');renderKbar();}
+    function closePalette(){kbar.classList.remove('open');}
+    openK.addEventListener('click',openPalette);
+    kbar.addEventListener('click',(e)=>{if(e.target===kbar) closePalette();});
+    window.addEventListener('keydown',(e)=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openPalette();} if(e.key==='Escape') closePalette();});
   </script>
 </body>
 </html>
