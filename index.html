@@ -223,6 +223,54 @@ taskkill /F /IM nome_do_programa.exe</code></pre>
         </ul>
       </details>
     </section>
+
+    <!-- NOVA SEÇÃO: DiskPart -->
+    <section class="card" style="margin-top:18px" aria-labelledby="diskpart">
+      <h3 id="diskpart">Como formatar um HD externo usando DiskPart no Windows</h3>
+      <ol style="margin-top:10px; padding-left:20px">
+        <li>Abra o Prompt de Comando como administrador:
+          <pre><code>Win + R → cmd → Executar como administrador</code></pre>
+        </li>
+        <li>Inicie o DiskPart:
+          <pre><code>diskpart</code></pre>
+        </li>
+        <li>Liste os discos conectados:
+          <pre><code>list disk</code></pre>
+          ➝ Verifique qual é o número do seu HD externo (pelo tamanho).
+        </li>
+        <li>Selecione o disco correto:
+          <pre><code>select disk 1</code></pre>
+          (substitua o número se for diferente no seu caso).
+        </li>
+        <li>Apague tudo do disco:
+          <pre><code>clean</code></pre>
+        </li>
+        <li>Crie uma nova partição primária:
+          <pre><code>create partition primary</code></pre>
+        </li>
+        <li>Selecione a partição criada:
+          <pre><code>select partition 1</code></pre>
+        </li>
+        <li>Formate a partição (compatibilidade Windows + PS4/PS5):
+          <pre><code>format fs=exfat quick</code></pre>
+          ➝ Apenas Windows:
+          <pre><code>format fs=ntfs quick</code></pre>
+        </li>
+        <li>Atribua uma letra de unidade:
+          <pre><code>assign</code></pre>
+        </li>
+        <li>Saia do DiskPart:
+          <pre><code>exit</code></pre>
+        </li>
+      </ol>
+      <p class="note" style="margin-top:10px">
+        ⚠️ <strong>Aviso:</strong> o comando <code>clean</code> apaga TODO o conteúdo do disco selecionado. Confira o número do disco antes de executar.
+      </p>
+      <p class="note" style="margin-top:6px">
+        ✅ Pronto! O HD externo aparecerá no <strong>Este Computador</strong> pronto para uso.
+      </p>
+      <button class="btn" data-copy="diskpart&#10;list disk&#10;select disk 1&#10;clean&#10;create partition primary&#10;select partition 1&#10;format fs=exfat quick&#10;assign&#10;exit">Copiar sequência DiskPart (exFAT)</button>
+    </section>
   </main>
 
   <footer>
@@ -301,10 +349,11 @@ taskkill /F /IM nome_do_programa.exe</code></pre>
       {title:'Rede — renovar/flush', cmd:'ipconfig /flushdns\nipconfig /release\nipconfig /renew\nnetsh winsock reset'},
       {title:'CHKDSK', cmd:'chkdsk C: /f /r'},
       {title:'System Info', cmd:'systeminfo'},
-      {title:'Drivers', cmd:'driverquery'}
+      {title:'Drivers', cmd:'driverquery'},
+      {title:'DiskPart — exFAT (rápido)', cmd:'diskpart\nlist disk\nselect disk 1\nclean\ncreate partition primary\nselect partition 1\nformat fs=exfat quick\nassign\nexit'}
     ];
     function renderKbar(){
-      kcontent.innerHTML=quickCmds.map(({title,cmd})=>`<div class=\"kitem\"><div><strong>${title}</strong><div><code>${cmd.replaceAll('\\n','<br>')}</code></div></div><div><button data-cmd=\"${encodeURIComponent(cmd)}\">Copiar</button></div></div>`).join('');
+      kcontent.innerHTML=quickCmds.map(({title,cmd})=>`<div class="kitem"><div><strong>${title}</strong><div><code>${cmd.replaceAll('\n','<br>')}</code></div></div><div><button data-cmd="${encodeURIComponent(cmd)}">Copiar</button></div></div>`).join('');
       kcontent.querySelectorAll('button[data-cmd]').forEach(b=>{
         b.addEventListener('click',()=>{const c=decodeURIComponent(b.getAttribute('data-cmd'));navigator.clipboard.writeText(c);b.textContent='✔';setTimeout(()=>b.textContent='Copiar',900);});
       });
